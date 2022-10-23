@@ -1,13 +1,20 @@
 import os
+from subprocess import check_output
 from typing import NoReturn
 
 from dotenv import load_dotenv
 
 
+def save_file(byte_archive: bytes, archive_name:str) -> NoReturn:
+    '''Сохраняет заархивированные данные в файл'''
+    with open('archive.zip', 'wb') as archive:
+        archive.write(byte_archive)
+
+
 def pack(files_path: str, archive_name: str) -> NoReturn:
     '''Упаковывает файлы в архив'''
-    cmd = f'zip -r - "{files_path}" > {archive_name}'
-    os.system(cmd)
+    archive = check_output(['zip', '-r', '-', files_path])
+    save_file(archive, archive_name)
 
 
 def main():
